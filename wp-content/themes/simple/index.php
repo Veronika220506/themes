@@ -1,96 +1,24 @@
-<!-- Раздел header -->
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Simplest site</title>
-    <link rel='stylesheet' id='main-style' href='style.css' type='text/css' media='all' />
-</head>
-
-<body class="body">
-    <div id="page" class="wrapper">
-        <!-- Шапка -->
-        <header id="sitehead" class="site-header">
-            <!-- Название сайта -->
-            <h1 class="site-title"><a href="#" rel="home">Simplest site</a></h1>
-            <div class="site-description"><a href="#" rel="home">Site description</a></div>
-        </header><!-- #sitehead -->
-        <div class="main">
-            <!-- Конец раздела header -->
-            <!-- Раздел sidebar -->
-            <aside class="sidebar">
-                <div id="search-container">
-                    <div class="search-box">
-                        <form name="search" action="#" method="get" class="search-form">
-                            <input type="text" value="" name="s" placeholder="Search" class="input">
-                            <button type="submit" class="button">GO</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- Меню -->
-                <nav id="primary-navigation" class="site-navigation">
-                    <ul class="top-menu">
-                        <li class="active">Home</li>
-                        <li><a href="#">Item 1</a></li>
-                        <li><a href="#">Item 2</a></li>
-                        <li><a href="#">Item 3</a></li>
-                        <li><a href="#">Item 4</a></li>
-                        <li><a href="#">Item 5</a></li>
-                        <li><a href="#">Item 6</a></li>
-                        <li><a href="#">Item 7</a></li>
-                    </ul>
-                </nav>
-            </aside>
-            <!-- Конец раздела sidebar -->
-            <!-- Раздел site-content -->
-            <div class="site-content">
-                <article id="post-ID">
-                    <header class="entry-header">
-                        <h1 class="entry-title"><a href="#">Lorem ipsum</a></h1>
-                        <h3>Category:</h3>
-                        <ul>
-                            <li>Category 1</li>
-                            <li>Category 2</li>
-                        </ul>
-                    </header><!-- .entry-header -->
-                    <div class="entry-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                            cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                        <p><a href="#">More..</a></p>
-                        <p>Pages: <a href="#">before</a> <a href="#">after</a></p>
-                    </div><!-- .entry-content -->
-                    <footer class="entry-meta">
-                        <p>Date... </p>
-                        <p><a href="#">Edit </a></p>
-                    </footer><!-- .entry-meta -->
-                </article><!-- #post -->
-                <nav id="nav-below">
-                    <div class="nav-previous"><a href="#">previous entry</a></div>
-                    <div class="nav-next"><a href="#">next entry</a></div>
-                </nav><!-- #nav-below .navigation -->
-            </div><!-- .site-content -->
-            <!-- Конец раздела site-content -->
-            <!-- Раздел site-footer -->
-            <div class="clear"></div>
+<?php get_header();
+get_sidebar(); ?>
+<div class="site-content">
+    <?php if ( have_posts() ) : ?>
+    <!-- Начало цикла WordPress -->
+    <?php while ( have_posts() ) : the_post(); ?>
+    <?php get_template_part( 'template-parts/content/content' );?>
+    <?php endwhile; ?>
+    <!-- Конец цикла WordPress -->
+    <?php if ( $wp_query->max_num_pages > 1 ) : ?>
+    <nav id="nav-below">
+        <div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav"><</span> Предыдущая запись') ); ?>
         </div>
-        <!-- Подвал сайта -->
-        <footer id="colophon" class="site-footer">
-            <div class="site-info">
-                <a href="http://wordpress.org/">WordPress</a>
-            </div><!-- .site-info -->
-        </footer><!-- #colophon -->
-    </div><!-- #page -->
-</body>
-
-</html>
-<!-- Конец раздела site-footer -->
+        <div class="nav-next"><?php previous_posts_link( __( 'следующая запись <span class="meta-nav">></span>') ); ?>
+        </div>
+    </nav><!-- #nav-below .navigation -->
+    <?php endif; ?>
+    <!-- Записей для отображения нет, тогда выводим сообщение об этом -->
+    <?php else : ?>
+    <?php get_template_part( 'template-parts/content/content', 'none' );?>
+    <!--.not-found -->
+    <?php endif; // конец have_posts() проверки ?>
+</div><!-- .site-content -->
+<?php get_footer(); ?>
